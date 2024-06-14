@@ -9,6 +9,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Slf4j
 @AllArgsConstructor
@@ -29,10 +32,13 @@ public class GetSubscriptionCommand implements IBotCommand {
         SendMessage answer = new SendMessage();
         answer.setChatId(message.getChatId());
 
-        Subscriptions s = new Subscriptions();
+        Subscriptions s = SubscribeCommand.getsObj();
 
-        answer.setText("Список: ");
-        s.getSubs().forEach(number -> answer.setText(number + " "));
+        String text = "";
+        for (String sub : s.getSubs()){
+            text += sub + "\n";
+        }
+        answer.setText("Список подписок:\n" + text);
 
         try {
             absSender.execute(answer);
